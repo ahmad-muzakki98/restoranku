@@ -1,5 +1,6 @@
 @include('customer.layouts.__header')
 
+@yield('script') <!-- sebelum </body> -->
 <body>
 
     <!-- Spinner Start -->

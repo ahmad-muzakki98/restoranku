@@ -50,6 +50,7 @@
 @section('script')
 <script>
     function addToCart(menuId){
+        console.log("Menambahkan ke cart: ", menuId); // ← Tambahkan ini dulu
         fetch("{{ route('cart.add') }}",{
             method: 'POST',
             headers:{
@@ -58,7 +59,7 @@
             },
             body: JSON.stringify({id: menuId})
         })
-        .then(response=>response.JSON())
+        .then(response=>response.json())
         .then(data=>{
             alert(data.message)
         })
