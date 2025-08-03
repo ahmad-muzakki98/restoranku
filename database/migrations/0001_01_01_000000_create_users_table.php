@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('phone');
             $table->unsignedBigInteger('role_id');
             $table->softDeletes();
-            $$table->timestamps();
+            $table->timestamps();
 
             $table->foreign('role_id')->references('id')->on('roles');
         });

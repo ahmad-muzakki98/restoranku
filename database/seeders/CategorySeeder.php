@@ -16,6 +16,13 @@ class CategorySeeder extends Seeder
             ['cat_name' => 'Minuman', 'description' => 'Kategori Minuman'],
         ];
 
-        DB::table('categories')->insert($categories);
+        // DB::table('categories')->insert($categories);/
+
+        foreach ($categories as $category) {
+            DB::table('categories')->updateOrInsert(
+                ['cat_name' => $category['cat_name']],
+                ['description' => $category['description']]
+            );
+        }
     }
 }
