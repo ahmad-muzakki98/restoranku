@@ -25,6 +25,8 @@ class itemController extends Controller
     public function create()
     {
         $categories = Category::orderBy('cat_name', 'asc')->get();
+
+        // Return the view with to create a new item
         return view('admin.item.create', compact('categories'));
     }
 
@@ -33,7 +35,48 @@ class itemController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // Validate the request data
+        $validatedData = $request->validate(
+            [
+                'name' => 'required|string|max:255',
+                'description' => 'nullable|string',
+                'price' => 'required|numeric|min:0',
+                'category_id' => 'required|exists:categories,id',
+                'img' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'is_active' => 'required|boolean'
+            ],
+            [
+                'name.required' => 'The item name is required.',
+                'description.string' => 'The description must be a string.',
+                'price.required' => 'The price is required.',
+                'category_id.required' => 'The category is required.',
+                'img.image' => 'The image must be an image file.',
+                'img.max' => 'The image must not exceed 2MB.',
+                'is_active.required' => 'The active status is required.',
+                'is_active.boolean' => 'The active status must be a boolean value.',
+            ]
+        );
+
+        // Create a new item
+        $item = new Item();
+        $item->name = $request->name;
+        $item->category_id = $request->category_id;
+        $item->price = $request->price;
+        $item->description = $request->description;
+
+        // Handle image upload if provided
+        if ($request->hasFile('img')) {
+            $image = $request->file('img');
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('img_item_upload'), $imageName);
+            $validatedData['img'] = $imageName;
+        }
+
+        // Save the item to the database
+        $item = Item::create($validatedData);
+
+        // Redirect to the item index with a success message
+        return redirect()->route('items.index')->with('success', 'Item created successfully.');
     }
 
     /**
@@ -49,7 +92,11 @@ class itemController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $item = Item::findOrFail($id);
+        $categories = Category::orderBy('cat_name', 'asc')->get();
+
+        // Return the view with to create a new item
+        return view('admin.item.edit', compact('item', 'categories'));
     }
 
     /**
@@ -57,7 +104,42 @@ class itemController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        // Validate the request data
+        $validatedData = $request->validate(
+            [
+                'name' => 'required|string|max:255',
+                'description' => 'nullable|string',
+                'price' => 'required|numeric|min:0',
+                'category_id' => 'required|exists:categories,id',
+                'img' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:2048',
+                'is_active' => 'required|boolean'
+            ],
+            [
+                'name.required' => 'The item name is required.',
+                'description.string' => 'The description must be a string.',
+                'price.required' => 'The price is required.',
+                'category_id.required' => 'The category is required.',
+                'img.image' => 'The image must be an image file.',
+                'img.max' => 'The image must not exceed 2MB.',
+                'is_active.required' => 'The active status is required.',
+                'is_active.boolean' => 'The active status must be a boolean value.',
+            ]
+        );
+
+        // Handle image upload if provided
+        if ($request->hasFile('img')) {
+            $image = $request->file('img');
+            $imageName = time() . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('img_item_upload'), $imageName);
+            $validatedData['img'] = $imageName;
+        }
+
+        // Find the item and update it
+        $item = Item::findOrFail($id);
+        $item->update($validatedData);
+
+        // Redirect to the item index with a success message
+        return redirect()->route('items.index')->with('success', 'Item updated successfully.');
     }
 
     /**
@@ -65,6 +147,11 @@ class itemController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        // Find the item and delete it
+        $item = Item::findOrFail($id);
+        $item->delete();
+
+        // Redirect to the item index with a success message
+        return redirect()->route('items.index')->with('success', 'Item deleted successfully.');
     }
 }

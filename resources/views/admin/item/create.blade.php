@@ -12,7 +12,18 @@
     </div>
     <div class="card">
         <div class="card-body">
-            <form class="form" action="{{ route('items.store') }}" enctype="multipart/form-data">
+            @if ($errors->any())
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <h5 class="alert-heading">Create Error!</h5>
+                    @foreach ($errors->all() as $error)
+                        <li>
+                            {{ $error }}</i>
+                        </li>
+                    @endforeach
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+            <form class="form" action="{{ route('items.store') }}" enctype="multipart/form-data" method="POST">
                 @csrf
                 <form action="form-body">
                     <div class="row">
@@ -47,7 +58,7 @@
 
                             <div class="form-group">
                                 <label for="image">Gambar</label>
-                                <input type="file" class="form-control" id="image" name="image" required>
+                                <input type="file" class="form-control" id="image" name="img" required>
                             </div>
 
                             <div class="form-group">
@@ -62,9 +73,10 @@
 
                             <div class="form-group d-flex justify-content-end">
                                 <button type="submit" class="btn btn-primary me-1 mb-1">Simpan</button>
-                                <button type="submit" class="btn btn-secondary me-1 mb-1">Reset</button>
+                                {{-- <button type="submit" class="btn btn-light-secondary me-1 mb-1">Reset</button> --}}
+                                <button type="reset" class="btn btn-light-secondary me-1 mb-1">Reset</button>
                                 <a href="{{ route('items.index') }}" type="submit"
-                                    class="btn btn-primary me-1 mb-1">Batal</a>
+                                    class="btn btn-light-secondary me-1 mb-1">Batal</a>
                             </div>
 
                         </div>
