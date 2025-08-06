@@ -14,7 +14,7 @@
         <div class="card-body">
             @if ($errors->any())
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <h5 class="alert-heading">Create Error!</h5>
+                    <h5 class="alert-heading">Submit Error!</h5>
                     @foreach ($errors->all() as $error)
                         <li>
                             {{ $error }}</i>
@@ -23,7 +23,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             @endif
-            <form class="form" action="{{ route('roles.store') }}" enctype="multipart/form-data" method="POST">
+            <form class="form" action="{{ route('roles.store') }}" method="POST">
                 @csrf
                 <form action="form-body">
                     <div class="row">

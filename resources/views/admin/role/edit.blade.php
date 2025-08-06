@@ -23,8 +23,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             @endif
-            <form class="form" action="{{ route('roles.update', $role->id) }}" enctype="multipart/form-data"
-                method="POST">
+            <form class="form" action="{{ route('roles.update', $role->id) }}" method="POST">
                 @csrf
                 @method('PUT')
                 <form action="form-body">

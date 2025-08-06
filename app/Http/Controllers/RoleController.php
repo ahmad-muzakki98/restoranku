@@ -81,7 +81,7 @@ class RoleController extends Controller
         $role->update($request->all());
 
         // Redirect to the role index page
-        return redirect()->route('roles.index')->with('success', 'Role created successfully');
+        return redirect()->route('roles.index')->with('success', 'Role updated successfully');
     }
 
     /**
